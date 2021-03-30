@@ -96,6 +96,7 @@ Partial Class Form1
         '
         'cmbFrom
         '
+        Me.cmbFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbFrom.FormattingEnabled = True
         Me.cmbFrom.Location = New System.Drawing.Point(58, 24)
         Me.cmbFrom.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -145,6 +146,7 @@ Partial Class Form1
         '
         'cmbTo
         '
+        Me.cmbTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbTo.FormattingEnabled = True
         Me.cmbTo.Location = New System.Drawing.Point(582, 25)
         Me.cmbTo.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
