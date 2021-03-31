@@ -85,6 +85,8 @@ Public Class Form1
             'create the new assert
             s = s.Replace("Assert::AreNotEqual(", "mu_assert(""" & test_name & " failed" & """, ")
             r &= s & nl
+        ElseIf ln.Contains("};") Then   'last line of test method
+            r &= vbTab & "return 0;" & nl & ln & nl
         Else
             r &= ln & nl
         End If
@@ -102,8 +104,12 @@ Public Class Form1
         Dim firstoperand As String = ""
         Dim secondoperand As String = ""
 
-        If ln.Contains("static char*") OrElse ln.Contains("static char *") Then
+        If ln.Contains("static char*") Then
             Dim fn As String = ln.Split(" ")(2)
+            test_name = fn.Replace("mu_test", "").Replace("(void)", "")
+            r &= "TEST_METHOD(" & test_name & ")" & nl
+        ElseIf ln.Contains("static char *") Then 'allow for slightly different formatting, sometimes the * is against the function name
+            Dim fn As String = ln.Split(" ")(3)
             test_name = fn.Replace("mu_test", "").Replace("(void)", "")
             r &= "TEST_METHOD(" & test_name & ")" & nl
         ElseIf ln.Contains("mu_assert") Then
@@ -135,7 +141,7 @@ Public Class Form1
                     r &= "(uint32_t)" & firstoperand & ", (uint32_t)" & secondoperand & nl
                 End If
             End If
-        Else
+        ElseIf Not ln.Contains("return ") Then    'remove the return 0 from the end, which is in the minunit tests but not in the MSTests
             r &= ln & nl
         End If
         Return r
