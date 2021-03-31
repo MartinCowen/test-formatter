@@ -1,6 +1,5 @@
 ﻿Imports System.Net
 
-
 Public Class Form1
     Private Delegate Function linefunction_t(ln As String) As String 'function pointer type, see http://www.vb-helper.com/howto_2005_delegate_variable.html
 
@@ -27,12 +26,9 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub txtInput_TextChanged(sender As Object, e As EventArgs) Handles txtInput.TextChanged
         StartSourceFormat()
     End Sub
-
-
 
     Private Sub btnCopy_Click(sender As Object, e As EventArgs) Handles btnCopy.Click
         My.Computer.Clipboard.SetText(txtOutput.Text)
@@ -104,33 +100,34 @@ Public Class Form1
         Dim firstoperand As String = ""
         Dim secondoperand As String = ""
 
-        If ln.Contains("static char*") Then
-            Dim fn As String = ln.Split(" ")(2)
+        Dim linesplit() = ln.Split(" ")
+
+        If ln.Contains("static char*") AndAlso linesplit.Count > 2 Then
+            Dim fn As String = linesplit(2)
             test_name = fn.Replace("mu_test", "").Replace("(void)", "")
             r &= "TEST_METHOD(" & test_name & ")" & nl
-        ElseIf ln.Contains("static char *") Then 'allow for slightly different formatting, sometimes the * is against the function name
-            Dim fn As String = ln.Split(" ")(3)
-            test_name = fn.Replace("mu_test", "").Replace("(void)", "")
+        ElseIf ln.Contains("static char *") AndAlso linesplit.Count > 2 Then 'allow for slightly different formatting, sometimes the * is against the function name
+            Dim fn As String = linesplit(2)
+            test_name = fn.Replace("mu_test", "").Replace("(void)", "").Replace("*", "")
             r &= "TEST_METHOD(" & test_name & ")" & nl
         ElseIf ln.Contains("mu_assert") Then
             Dim p() As String = ln.Split("""") 'split on " not space or comma because must have quote, and comma could be inside a string
-
             If p.Length >= 2 Then
                 Dim q As String = p(2).Replace(",", "") '" exp == fun..
-                Dim s() As String = q.Split(" ")
-                For Each s1 As String In s
-                    If s1.Contains("==") Then
+                Dim ss() As String = q.Split(" ")
+                For Each s As String In ss
+                    If s.Contains("==") Then
                         bFoundRelation = True
                         bFoundEq = True
-                    ElseIf s1.Contains("!=") Then
+                    ElseIf s.Contains("!=") Then
                         bFoundRelation = True
                         bFoundNeq = True
                     ElseIf firstoperand = "" Then
-                        firstoperand = s1
+                        firstoperand = s
                     ElseIf secondoperand = "" Then
-                        secondoperand = s1
+                        secondoperand = s
                     End If
-                Next s1
+                Next s
                 If bFoundRelation Then
                     If bFoundEq Then
                         r = vbTab & "Assert::AreEqual("
