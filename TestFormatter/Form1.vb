@@ -76,6 +76,15 @@ Public Class Form1
             'create the new assert
             s = s.Replace("Assert::AreEqual(", "mu_assert(""" & test_name & " failed" & """, ")
             r &= s & nl
+        ElseIf ln.Contains("Assert::AreNotEqual") Then
+            Dim s As String
+            'remove the uint32_t casts
+            s = ln.Replace("(uint32_t)", "")
+            'replace the comma with not equal test
+            s = s.Replace(",", " !=")
+            'create the new assert
+            s = s.Replace("Assert::AreNotEqual(", "mu_assert(""" & test_name & " failed" & """, ")
+            r &= s & nl
         Else
             r &= ln & nl
         End If
@@ -87,18 +96,19 @@ Public Class Form1
         Dim r As String = ""
         Static test_name As String = "" 'test name needs to be retained between lines
 
-        Dim bFoundEq As Boolean
         Dim bFoundRelation As Boolean
+        Dim bFoundEq As Boolean
+        Dim bFoundNeq As Boolean
         Dim firstoperand As String = ""
         Dim secondoperand As String = ""
 
-        If ln.Contains("static char*") Then
+        If ln.Contains("static char*") OrElse ln.Contains("static char *") Then
             Dim fn As String = ln.Split(" ")(2)
             test_name = fn.Replace("mu_test", "").Replace("(void)", "")
             r &= "TEST_METHOD(" & test_name & ")" & nl
         ElseIf ln.Contains("mu_assert") Then
             Dim p() As String = ln.Split("""") 'split on " not space or comma because must have quote, and comma could be inside a string
-            r = vbTab & "Assert::AreEqual("
+
             If p.Length >= 2 Then
                 Dim q As String = p(2).Replace(",", "") '" exp == fun..
                 Dim s() As String = q.Split(" ")
@@ -106,6 +116,9 @@ Public Class Form1
                     If s1.Contains("==") Then
                         bFoundRelation = True
                         bFoundEq = True
+                    ElseIf s1.Contains("!=") Then
+                        bFoundRelation = True
+                        bFoundNeq = True
                     ElseIf firstoperand = "" Then
                         firstoperand = s1
                     ElseIf secondoperand = "" Then
@@ -114,8 +127,12 @@ Public Class Form1
                 Next s1
                 If bFoundRelation Then
                     If bFoundEq Then
-                        r &= "(uint32_t)" & firstoperand & ", (uint32_t)" & secondoperand & nl
+                        r = vbTab & "Assert::AreEqual("
                     End If
+                    If bFoundNeq Then
+                        r = vbTab & "Assert::AreNotEqual("
+                    End If
+                    r &= "(uint32_t)" & firstoperand & ", (uint32_t)" & secondoperand & nl
                 End If
             End If
         Else
