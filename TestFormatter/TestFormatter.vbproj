@@ -8,6 +8,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <Platforms>AnyCPU;x86</Platforms>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>  
   </PropertyGroup>
 
   <ItemGroup>

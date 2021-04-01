@@ -32,6 +32,8 @@ Partial Class Form1
         Me.btnClear = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.cmbTo = New System.Windows.Forms.ComboBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.txtClassPrefix = New System.Windows.Forms.TextBox()
         Me.Panel1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -98,7 +100,7 @@ Partial Class Form1
         '
         Me.cmbFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbFrom.FormattingEnabled = True
-        Me.cmbFrom.Location = New System.Drawing.Point(58, 24)
+        Me.cmbFrom.Location = New System.Drawing.Point(63, 12)
         Me.cmbFrom.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.cmbFrom.Name = "cmbFrom"
         Me.cmbFrom.Size = New System.Drawing.Size(174, 23)
@@ -107,7 +109,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(15, 28)
+        Me.Label1.Location = New System.Drawing.Point(20, 16)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(35, 15)
@@ -137,7 +139,7 @@ Partial Class Form1
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(555, 28)
+        Me.Label2.Location = New System.Drawing.Point(555, 15)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(19, 15)
@@ -148,17 +150,35 @@ Partial Class Form1
         '
         Me.cmbTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbTo.FormattingEnabled = True
-        Me.cmbTo.Location = New System.Drawing.Point(582, 25)
+        Me.cmbTo.Location = New System.Drawing.Point(582, 12)
         Me.cmbTo.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.cmbTo.Name = "cmbTo"
         Me.cmbTo.Size = New System.Drawing.Size(174, 23)
         Me.cmbTo.TabIndex = 7
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(555, 46)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(34, 15)
+        Me.Label3.TabIndex = 8
+        Me.Label3.Text = "Class"
+        '
+        'txtClassPrefix
+        '
+        Me.txtClassPrefix.Location = New System.Drawing.Point(595, 38)
+        Me.txtClassPrefix.Name = "txtClassPrefix"
+        Me.txtClassPrefix.Size = New System.Drawing.Size(161, 23)
+        Me.txtClassPrefix.TabIndex = 9
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(933, 640)
+        Me.Controls.Add(Me.txtClassPrefix)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.cmbTo)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.btnClear)
@@ -191,4 +211,6 @@ Partial Class Form1
     Friend WithEvents btnClear As Button
     Friend WithEvents Label2 As Label
     Friend WithEvents cmbTo As ComboBox
+    Friend WithEvents Label3 As Label
+    Friend WithEvents txtClassPrefix As TextBox
 End Class

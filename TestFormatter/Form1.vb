@@ -1,7 +1,7 @@
 ﻿Imports System.Net
 
 Public Class Form1
-    Private Delegate Function linefunction_t(ln As String) As String 'function pointer type, see http://www.vb-helper.com/howto_2005_delegate_variable.html
+    Private Delegate Function linefunction_t(ln As String, classname As String) As String 'function pointer type, see http://www.vb-helper.com/howto_2005_delegate_variable.html
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PopulateLangs()
@@ -52,17 +52,19 @@ Public Class Form1
 
         'convert each line
         For Each ln As String In txtInput.Text.Split(nl)
-            If linefunction IsNot Nothing Then txtOutput.Text &= linefunction(ln)
+            If linefunction IsNot Nothing Then txtOutput.Text &= linefunction(ln, txtClassPrefix.Text)
         Next ln
     End Sub
-    Private Function LineFormatMSTestToMinunit(ln As String) As String
+    Private Function LineFormatMSTestToMinunit(ln As String, classname As String) As String
         Dim nl As String = System.Environment.NewLine
         Dim r As String = ""
         Static test_name As String = "" 'test name needs to be retained between lines
+        Dim classprefix As String
+        If classname = "" Then classprefix = "" Else classprefix = classname & "_"
 
         If ln.Contains("TEST_METHOD") Then
             test_name = Trim(ln.Split("(")(1).Split(")")(0))
-            r &= "static char* mu_test" & test_name & "(void)" & nl
+            r &= "static char* mu_test" & "_" & classprefix & test_name & "(void)" & nl
         ElseIf ln.Contains("Assert::AreEqual") Then
             Dim s As String
             'remove the uint32_t casts
@@ -70,7 +72,7 @@ Public Class Form1
             'replace the comma with equal test
             s = s.Replace(",", " ==")
             'create the new assert
-            s = s.Replace("Assert::AreEqual(", "mu_assert(""" & test_name & " failed" & """, ")
+            s = s.Replace("Assert::AreEqual(", "mu_assert(""" & classprefix & test_name & " failed" & """, ")
             r &= s & nl
         ElseIf ln.Contains("Assert::AreNotEqual") Then
             Dim s As String
@@ -79,7 +81,7 @@ Public Class Form1
             'replace the comma with not equal test
             s = s.Replace(",", " !=")
             'create the new assert
-            s = s.Replace("Assert::AreNotEqual(", "mu_assert(""" & test_name & " failed" & """, ")
+            s = s.Replace("Assert::AreNotEqual(", "mu_assert(""" & classprefix & test_name & " failed" & """, ")
             r &= s & nl
         ElseIf ln.Contains("};") Then   'last line of test method
             r &= vbTab & "return 0;" & nl & ln & nl
@@ -89,7 +91,7 @@ Public Class Form1
         Return r
     End Function
 
-    Private Function LineFormatMinunitToMSTest(ln As String) As String
+    Private Function LineFormatMinunitToMSTest(ln As String, classname As String) As String
         Dim nl As String = System.Environment.NewLine
         Dim r As String = ""
         Static test_name As String = "" 'test name needs to be retained between lines
@@ -104,7 +106,8 @@ Public Class Form1
 
         If ln.Contains("static char*") AndAlso linesplit.Count > 2 Then
             Dim fn As String = linesplit(2)
-            test_name = fn.Replace("mu_test", "").Replace("(void)", "")
+            test_name = fn.Replace("mu_test", "").Replace("(void)", "").Replace("_" & classname & "_", "")
+            If test_name.StartsWith("_") Then test_name = test_name.Substring(1, test_name.Length - 1) 'remove leading _
             r &= "TEST_METHOD(" & test_name & ")" & nl
         ElseIf ln.Contains("static char *") AndAlso linesplit.Count > 2 Then 'allow for slightly different formatting, sometimes the * is against the function name
             Dim fn As String = linesplit(2)
@@ -163,6 +166,7 @@ Public Class Form1
 
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         txtInput.Text = String.Empty
+        txtClassPrefix.Text = String.Empty
         txtInput.Focus()
     End Sub
 
@@ -171,6 +175,10 @@ Public Class Form1
     End Sub
 
     Private Sub cmbTo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbTo.SelectedIndexChanged
+        StartSourceFormat()
+    End Sub
+
+    Private Sub txtClassPrefix_TextChanged(sender As Object, e As EventArgs) Handles txtClassPrefix.TextChanged
         StartSourceFormat()
     End Sub
 End Class
