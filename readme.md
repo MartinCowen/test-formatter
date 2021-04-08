@@ -21,9 +21,12 @@ Conversion is run on every character change in the left pane or on change of sel
 The window is resizable and the pane splitter is movable.
 
 ## Installation
-No installer is provided because the program consists of a single executable with one dependent dll. It assumes the standard .NET 5 library is available. The executable file is at
+No installer is provided because the program consists of a single executable with one dependent dll. It assumes the standard .NET 5 library is available. The executable files are
 
-https://github.com/MartinCowen/
+
+https://github.com/MartinCowen/test-formatter/blob/main/TestFormatter/bin/x86/Release/net5.0-windows/TestFormatter.exe
+https://github.com/MartinCowen/test-formatter/blob/main/TestFormatter/bin/x86/Release/net5.0-windows/TestFormatter.dll
+
 
 ## Source Code
 Written in VB.NET as a WinForms application using .NET Framework 5 in Visual Studio 2019
