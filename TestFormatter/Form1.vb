@@ -1,12 +1,10 @@
-﻿Imports System.Net
-
-Public Class Form1
+﻿Public Class Form1
     Private Delegate Function linefunction_t(ln As String, classname As String) As String 'function pointer type, see http://www.vb-helper.com/howto_2005_delegate_variable.html
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        PopulateLangs()
+        PopulateFormats()
     End Sub
-    Private Sub PopulateLangs()
+    Private Sub PopulateFormats()
         With cmbFrom
             .Enabled = False
             .Items.Add("MSTest")
@@ -37,7 +35,7 @@ Public Class Form1
         'check that conversion is required
         If cmbFrom.SelectedIndex < 0 OrElse cmbTo.SelectedIndex < 0 OrElse cmbFrom.SelectedIndex = cmbTo.SelectedIndex Then Exit Sub
 
-        'select the conversion function
+        'select the conversion function uses "function pointers"
         Dim linefunction As linefunction_t
         If cmbFrom.SelectedItem.ToString = "MSTest" AndAlso cmbTo.SelectedItem.ToString = "minunit" Then
             linefunction = AddressOf LineFormatMSTestToMinunit
