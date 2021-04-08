@@ -24,8 +24,8 @@ The window is resizable and the pane splitter is movable.
 No installer is provided because the program consists of a single executable with one dependent dll. It assumes the standard .NET 5 library is available. The executable files are
 
 
-https://github.com/MartinCowen/test-formatter/blob/main/TestFormatter/bin/x86/Release/net5.0-windows/TestFormatter.exe
-https://github.com/MartinCowen/test-formatter/blob/main/TestFormatter/bin/x86/Release/net5.0-windows/TestFormatter.dll
+- https://github.com/MartinCowen/test-formatter/blob/main/TestFormatter/bin/x86/Release/net5.0-windows/TestFormatter.exe  
+- https://github.com/MartinCowen/test-formatter/blob/main/TestFormatter/bin/x86/Release/net5.0-windows/TestFormatter.dll
 
 
 ## Source Code
