@@ -1,6 +1,8 @@
 # TestFormatter
 This utility converts between different formats for unit tests. It uses a simple text substitution method rather than a code parser so you need to be aware of the limitations and check the results, but it can still save a lot of time when converting many tests.
 
+![TestFormatter](testformatter_example.png)
+
 ## Conversions
  - MSTest C++ to minunit C
  - minunit C to MSTest C++
